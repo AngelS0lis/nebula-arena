@@ -15,7 +15,7 @@ spec:
         spec:
           containers:
             - name: nebula
-              image: 906048429598.dkr.ecr.us-east-1.amazonaws.com/nebula-server:1.0
+              image: 906048429598.dkr.ecr.us-east-1.amazonaws.com/nebula-server:026234cdf1e8514ad8c64404aee708cc9fb893fd
               ports:
                 - name: metrics  # lo leerá Prometheus en la práctica 3.4
                   containerPort: 9100
