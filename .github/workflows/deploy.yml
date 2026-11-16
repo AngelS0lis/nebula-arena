@@ -1,0 +1,27 @@
+name: nebula-server-ci
+on:
+  push:
+    branches: [main]
+env:
+  IMG: 906048429598.dkr.ecr.us-east-1.amazonaws.com/nebula-server
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Pruebas
+        run: pip install -r requirements.txt pytest && pytest -q
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::906048429598:role/github-deployer
+          aws-region: us-east-1
+      - uses: aws-actions/amazon-ecr-login@v2
+      - name: Construir y publicar imagen
+        run: |
+          docker build -t $IMG:${{ github.sha }} .
+          docker push $IMG:${{ github.sha }}
